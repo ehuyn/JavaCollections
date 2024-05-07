@@ -65,10 +65,12 @@ public class Main2 {
                 input = Integer.parseInt(in.nextLine());
                 // Check if input for the number of candidates is out of range.
                 if(input < min && min == 2){
+                    isInvalid = true;
                     System.out.println("A minimum of two candidates must be entered.\n");
                 }
                 // Check if input for candidate voting is out of range.
                 else if(input < min || input > max){
+                    isInvalid = true;
                     System.out.println("Invalid candidate id. Input must be in between " + min + " and " + max + ", inclusive.\n");
                 }
                 // Check if input is empty.
@@ -86,7 +88,7 @@ public class Main2 {
                 System.out.println(noIntErrorMsg + "\n");
                 isInvalid = true;
             }
-        } while(input < min || input > max || isInvalid);
+        }while(isInvalid);
         return input;
     }
 
@@ -94,32 +96,34 @@ public class Main2 {
     private static String getValidStrInput(String prompt){
         Scanner in = new Scanner(System.in);
         String input;
-        boolean nameTaken;
+        boolean isInvalid;
 
         do{
-            nameTaken = false;
+            isInvalid = false;
             System.out.print(prompt);
             input = in.nextLine().trim();
 
             // Check if input is empty.
             if(input.isEmpty()){
+                isInvalid = true;
                 System.out.println("Please enter the candidate's name.\n");
             }
             // Check if input contains characters other than letters and spaces.
             else if(!input.matches("[a-zA-Z ]+")){
+                isInvalid = true;
                 System.out.println("Candidate's name cannot contain characters other than letters or spaces.\n");
             }
             // Check if name (input) is already taken by another candidate.
             else{
                 for(Candidate candidate : Candidate.getCandidatesList()){
                     if(candidate.getName().equals(input)){
-                        nameTaken = true;
+                        isInvalid = true;
                         System.out.println("Candidate already exists. If entering a new candidate, please use a different name.\n");
                         break;
                     }
                 }
             }
-        } while(!input.matches("[a-zA-Z ]+") || input.isEmpty() || nameTaken);
+        }while(isInvalid);
         return input;
     }
 }
